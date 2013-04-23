@@ -1,0 +1,26 @@
+diff --git a/sdk/tools/font/fontgen.py b/sdk/tools/font/fontgen.py
+index 0622477..99ec502 100644
+--- a/sdk/tools/font/fontgen.py
++++ b/sdk/tools/font/fontgen.py
+@@ -175,7 +175,7 @@ def cmd_pfo(args):
+     if (args.tracking):
+         f.set_tracking_adjust(args.tracking)
+     if (args.filter):
+-        f.set_regex_filter(args.filter)
++        f.set_regex_filter(eval("u'%s'" % args.filter))
+     f.convert_to_pfo(args.output_pfo)
+ 
+ def process_all_fonts():
+diff --git a/sdk/waftools/process_resources.py b/sdk/waftools/process_resources.py
+index 4a6eac7..9eb9175 100644
+--- a/sdk/waftools/process_resources.py
++++ b/sdk/waftools/process_resources.py
+@@ -81,7 +81,7 @@ def gen_resource_deps(bld,
+             else:
+                 trackingAdjustArg = ''
+             if 'characterRegex' in entry:
+-                characterRegexArg = '--filter "%s"' % entry['characterRegex']
++                characterRegexArg = '--filter "%s"' % entry['characterRegex'].encode('unicode_escape')
+             else:
+                 characterRegexArg = ''
+             bld(rule = "python {} pfo {} {} {} {} {}".format(font_script.abspath(),
